@@ -409,9 +409,9 @@ function showInvoice(txId) {
   const preview = document.getElementById('invoicePreview');
   preview.setAttribute('data-tx-id', txId);
   const storeName = getSetting('storeName','KD - Krisna Digital');
-  const storeAddress = getSetting('storeAddress','Jl. Merdeka Raya');
-  const storePhone = getSetting('storePhone','+62 812-3456-7890');
-  const storeEmail = getSetting('storeEmail','info@kd-store.com');
+  const storeAddress = getSetting('storeAddress','Jl. Pelabuhan, Br. Pasar, Pekutatan, Kabupaten Jembrana, Bali');
+  const storePhone = getSetting('storePhone','+62 878-8226-1578');
+  const storeEmail = getSetting('storeEmail','krisna.kusumaaaa@gmail.com');
   const today = formatDate(tx.createdAt);
   const time = new Date(tx.createdAt).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
   const statusClass = tx.status==='Lunas'?'status-lunas':'status-belum';
@@ -434,9 +434,9 @@ async function generatePDF(tx) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   const storeName = getSetting('storeName','KD - Krisna Digital');
-  const storeAddress = getSetting('storeAddress','Jl. Merdeka Raya');
-  const storePhone = getSetting('storePhone','+62 812-3456-7890');
-  const storeEmail = getSetting('storeEmail','info@kd-store.com');
+  const storeAddress = getSetting('storeAddress','Jl. Pelabuhan, Br. Pasar, Pekutatan, Kabupaten Jembrana, Bali');
+  const storePhone = getSetting('storePhone','+62 878-8226-1578');
+  const storeEmail = getSetting('storeEmail','krisna.kusumaaaa@gmail.com');
   const today = formatDate(tx.createdAt);
   const time = new Date(tx.createdAt).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
   const logoData = await loadLogoDataUrl();
