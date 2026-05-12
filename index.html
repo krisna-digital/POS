@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="id" data-bs-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KD - Kasir Pro</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Floating Action Button (Shortcut Transaksi) -->
+<button class="fab-btn" id="fabButton" onclick="showPage('transaction', event)">
+  <i class="bi bi-plus-lg"></i>
+</button>
+
+<!-- Navbar -->
+<nav class="main-nav">
+  <div class="container-fluid px-3 px-lg-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2">
+          <!-- Logo gambar -->
+          <img src="logo.png" alt="Logo Toko" class="logo-img" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22%23667eea%22%20rx%3D%2210%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-size%3D%2218%22%3EKD%3C%2Ftext%3E%3C%2Fsvg%3E';">
+          <div>
+            <div class="logo-text">KD Kasir</div>
+            <div class="logo-sub">Toko Profesional</div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="nav nav-pills flex-nowrap overflow-auto" id="mainNav">
+        <li class="nav-item">
+          <a class="nav-link active" href="#" onclick="showPage('dashboard', event)">
+            <i class="bi bi-grid-1x2-fill me-1"></i>Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showPage('customers', event)">
+            <i class="bi bi-people-fill me-1"></i>Pelanggan
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showPage('items', event)">
+            <i class="bi bi-box-seam-fill me-1"></i>Barang
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showPage('transaction', event)">
+            <i class="bi bi-cart-plus-fill me-1"></i>Transaksi
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showPage('history', event)">
+            <i class="bi bi-clock-history me-1"></i>Riwayat
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showPage('settings', event)">
+            <i class="bi bi-gear-fill me-1"></i>Pengaturan
+          </a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-3">
+        <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+          <div class="toggle-ball"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container-fluid px-3 px-lg-4 py-4">
+
+  <!-- ==================== DASHBOARD ==================== -->
+  <div class="page-section active" id="page-dashboard">
+    <div class="row g-4 mb-4 animate-in">
+      <div class="col-6 col-lg-3">
+        <div class="glass-card stat-card">
+          <div class="stat-icon bg-gradient-primary">
+            <i class="bi bi-cash-stack"></i>
+          </div>
+          <div class="stat-value" id="statTodaySales">Rp 0</div>
+          <div class="stat-label">Penjualan Hari Ini</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="glass-card stat-card">
+          <div class="stat-icon bg-gradient-success">
+            <i class="bi bi-receipt"></i>
+          </div>
+          <div class="stat-value" id="statTodayCount">0</div>
+          <div class="stat-label">Transaksi Hari Ini</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="glass-card stat-card">
+          <div class="stat-icon bg-gradient-accent">
+            <i class="bi bi-box-seam"></i>
+          </div>
+          <div class="stat-value" id="statTotalItems">0</div>
+          <div class="stat-label">Total Barang</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="glass-card stat-card">
+          <div class="stat-icon bg-gradient-warning">
+            <i class="bi bi-people"></i>
+          </div>
+          <div class="stat-value" id="statTotalCustomers">0</div>
+          <div class="stat-label">Total Pelanggan</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 animate-in" style="animation-delay:0.1s">
+      <div class="col-lg-8">
+        <div class="glass-card p-4">
+          <h5 class="mb-3"><i class="bi bi-clock-history me-2" style="color:#667eea"></i>Transaksi Terbaru</h5>
+          <div id="recentTransactions">
+            <div class="empty-state">
+              <i class="bi bi-inbox"></i>
+              <p>Belum ada transaksi</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="glass-card p-4">
+          <h5 class="mb-3"><i class="bi bi-star me-2" style="color:#f093fb"></i>Barang Terlaris</h5>
+          <div id="topItems">
+            <div class="empty-state">
+              <i class="bi bi-inbox"></i>
+              <p>Belum ada data</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CUSTOMERS ==================== -->
+  <div class="page-section" id="page-customers">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 animate-in">
+      <h4 class="mb-0"><i class="bi bi-people-fill me-2" style="color:#667eea"></i>Manajemen Pelanggan</h4>
+      <button class="btn btn-glass-primary" onclick="openCustomerModal()">
+        <i class="bi bi-plus-lg me-2"></i>Tambah Pelanggan
+      </button>
+    </div>
+
+    <div class="glass-card p-3 mb-4 animate-in" style="animation-delay:0.1s">
+      <div class="search-box">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text" class="form-control form-control-glass" placeholder="Cari pelanggan..." id="customerSearch" oninput="renderCustomers()">
+      </div>
+    </div>
+
+    <div class="table-responsive animate-in" style="animation-delay:0.2s">
+      <table class="table table-glass mb-0" id="customerTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Telepon</th>
+            <th>Alamat</th>
+            <th>WhatsApp</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="customerTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== ITEMS ==================== -->
+  <div class="page-section" id="page-items">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 animate-in">
+      <h4 class="mb-0"><i class="bi bi-box-seam-fill me-2" style="color:#667eea"></i>Manajemen Barang</h4>
+      <button class="btn btn-glass-primary" onclick="openItemModal()">
+        <i class="bi bi-plus-lg me-2"></i>Tambah Barang
+      </button>
+    </div>
+
+    <div class="glass-card p-3 mb-4 animate-in" style="animation-delay:0.1s">
+      <div class="row g-2">
+        <div class="col-md-8">
+          <div class="search-box">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" class="form-control form-control-glass" placeholder="Cari barang..." id="itemSearch" oninput="renderItems()">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <select class="form-control form-control-glass" id="itemCategoryFilter" onchange="renderItems()">
+            <option value="">Semua Kategori</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive animate-in" style="animation-delay:0.2s">
+      <table class="table table-glass mb-0" id="itemTable">
+        <thead>
+          <tr>
+            <th>Kode</th>
+            <th>Nama Barang</th>
+            <th>Kategori</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="itemTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== TRANSACTION ==================== -->
+  <div class="page-section" id="page-transaction">
+    <h4 class="mb-4 animate-in"><i class="bi bi-cart-plus-fill me-2" style="color:#667eea"></i>Buat Transaksi Baru</h4>
+
+    <div class="row g-4">
+      <!-- Left: Item Selection -->
+      <div class="col-lg-7 animate-in" style="animation-delay:0.1s">
+        <!-- Customer Selection -->
+        <div class="glass-card p-3 mb-3">
+          <label class="form-label fw-semibold mb-2"><i class="bi bi-person me-2" style="color:#667eea"></i>Pilih Pelanggan</label>
+          <div class="row g-2">
+            <div class="col-md-8">
+              <select class="form-control form-control-glass" id="txCustomer">
+                <option value="">-- Pilih Pelanggan --</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-glass-primary w-100" onclick="openCustomerModal(null, true)">
+                <i class="bi bi-plus me-1"></i>Baru
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item Search -->
+        <div class="glass-card p-3 mb-3">
+          <div class="search-box mb-3">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" class="form-control form-control-glass" placeholder="Cari barang..." id="txItemSearch" oninput="renderTxItems()">
+          </div>
+
+          <div id="txItemList" style="max-height:400px;overflow-y:auto;">
+            <!-- Items will be rendered here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Cart -->
+      <div class="col-lg-5 animate-in" style="animation-delay:0.2s">
+        <div class="cart-panel p-3">
+          <h6 class="mb-3"><i class="bi bi-cart3 me-2" style="color:#667eea"></i>Keranjang Belanja</h6>
+
+          <div id="cartItems" style="max-height:300px;overflow-y:auto;">
+            <div class="empty-state py-3">
+              <i class="bi bi-cart-x" style="font-size:2rem"></i>
+              <p class="mt-2 mb-0" style="font-size:0.85rem">Keranjang kosong</p>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="mb-2">
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Subtotal</span>
+              <span class="fw-semibold" id="cartSubtotal">Rp 0</span>
+            </div>
+          </div>
+          <div class="mb-2">
+            <label class="form-label mb-1" style="font-size:0.85rem">Diskon (Rp)</label>
+            <input type="number" class="form-control form-control-glass form-control-sm" id="cartDiscount" value="0" oninput="updateCartTotals()" min="0">
+          </div>
+          <div class="mb-3">
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Diskon</span>
+              <span class="fw-semibold" id="cartDiscountDisplay">- Rp 0</span>
+            </div>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between mb-3">
+            <span class="fw-bold" style="font-size:1.1rem">Total</span>
+            <span class="fw-bold" style="font-size:1.2rem;color:#667eea" id="cartTotal">Rp 0</span>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label mb-1" style="font-size:0.85rem">Metode Pembayaran</label>
+            <select class="form-control form-control-glass form-control-sm" id="paymentMethod">
+              <option value="Cash">Cash</option>
+              <option value="Transfer Bank">Transfer Bank</option>
+              <option value="QRIS">QRIS</option>
+              <option value="Debit">Debit</option>
+              <option value="Credit Card">Credit Card</option>
+            </select>
+          </div>
+
+          <!-- Switch Lunas / Belum Lunas -->
+          <div class="mb-3">
+            <label class="form-label mb-1" style="font-size:0.85rem">Status Pembayaran</label>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="paymentStatusSwitch">
+              <label class="form-check-label" for="paymentStatusSwitch" id="paymentStatusLabel">Belum Lunas</label>
+            </div>
+          </div>
+
+          <button class="btn btn-glass-success w-100 mb-2" onclick="processTransaction()">
+            <i class="bi bi-check-circle me-2"></i>Proses Transaksi
+          </button>
+          <button class="btn btn-glass-warning w-100" onclick="clearCart()">
+            <i class="bi bi-trash me-2"></i>Kosongkan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== HISTORY ==================== -->
+  <div class="page-section" id="page-history">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 animate-in">
+      <h4 class="mb-0"><i class="bi bi-clock-history me-2" style="color:#667eea"></i>Riwayat Transaksi</h4>
+    </div>
+
+    <div class="glass-card p-3 mb-4 animate-in" style="animation-delay:0.1s">
+      <div class="row g-2">
+        <div class="col-md-4">
+          <div class="search-box">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" class="form-control form-control-glass" placeholder="Cari invoice / pelanggan..." id="historySearch" oninput="renderHistory()">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <input type="date" class="form-control form-control-glass" id="historyDateFrom" onchange="renderHistory()">
+        </div>
+        <div class="col-md-3">
+          <input type="date" class="form-control form-control-glass" id="historyDateTo" onchange="renderHistory()">
+        </div>
+        <div class="col-md-2">
+          <select class="form-control form-control-glass" id="historyStatus" onchange="renderHistory()">
+            <option value="">Semua</option>
+            <option value="Lunas">Lunas</option>
+            <option value="Belum Lunas">Belum Lunas</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div id="historyList"></div>
+  </div>
+
+  <!-- ==================== SETTINGS ==================== -->
+  <div class="page-section" id="page-settings">
+    <h4 class="mb-4 animate-in"><i class="bi bi-gear-fill me-2" style="color:#667eea"></i>Pengaturan Toko</h4>
+
+    <div class="row g-4">
+      <div class="col-lg-6 animate-in" style="animation-delay:0.1s">
+        <div class="glass-card p-4">
+          <h6 class="mb-3"><i class="bi bi-shop me-2" style="color:#667eea"></i>Informasi Toko</h6>
+          <div class="mb-3">
+            <label class="form-label">Nama Toko</label>
+            <input type="text" class="form-control form-control-glass" id="settingStoreName" value="KD - Toko Profesional">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Alamat</label>
+            <textarea class="form-control form-control-glass" id="settingStoreAddress" rows="2">Jl. Merdeka Raya No. 123, Jakarta</textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Telepon</label>
+            <input type="text" class="form-control form-control-glass" id="settingStorePhone" value="+62 812-3456-7890">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control form-control-glass" id="settingStoreEmail" value="info@kd-store.com">
+          </div>
+          <button class="btn btn-glass-primary" onclick="saveSettings()">
+            <i class="bi bi-check-lg me-2"></i>Simpan Pengaturan
+          </button>
+        </div>
+      </div>
+
+      <div class="col-lg-6 animate-in" style="animation-delay:0.2s">
+        <div class="glass-card p-4 mb-4">
+          <h6 class="mb-3"><i class="bi bi-palette me-2" style="color:#f093fb"></i>Tampilan</h6>
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <span>Mode Gelap</span>
+            <div class="theme-toggle" id="themeToggle2" onclick="toggleTheme()">
+              <div class="toggle-ball"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card p-4 mb-4">
+          <h6 class="mb-3"><i class="bi bi-database me-2" style="color:#f5576c"></i>Data</h6>
+          <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-glass-primary" onclick="exportAllData()">
+              <i class="bi bi-download me-2"></i>Export Data
+            </button>
+            <button class="btn btn-glass-warning" onclick="document.getElementById('importFile').click()">
+              <i class="bi bi-upload me-2"></i>Import Data
+            </button>
+            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importAllData(event)">
+            <button class="btn btn-glass-danger" onclick="clearAllData()">
+              <i class="bi bi-trash me-2"></i>Hapus Semua
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-card p-4">
+          <h6 class="mb-3"><i class="bi bi-info-circle me-2" style="color:#4facfe"></i>Informasi Aplikasi</h6>
+          <p class="mb-1" style="font-size:0.9rem;color:var(--text-secondary)">Versi: 2.1.0</p>
+          <p class="mb-1" style="font-size:0.9rem;color:var(--text-secondary)">Framework: Bootstrap 5 + Vanilla JS</p>
+          <p class="mb-0" style="font-size:0.9rem;color:var(--text-secondary)">Storage: LocalStorage</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Customer Modal -->
+<div class="modal fade" id="customerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-content-glass">
+      <div class="modal-header">
+        <h5 class="modal-title" id="customerModalTitle">
+          <i class="bi bi-person-plus me-2" style="color:#667eea"></i>Tambah Pelanggan
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="customerId">
+        <div class="mb-3">
+          <label class="form-label">Nama Pelanggan *</label>
+          <input type="text" class="form-control form-control-glass" id="customerName" required autocomplete="off">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Nomor Telepon</label>
+          <input type="text" class="form-control form-control-glass" id="customerPhone" autocomplete="off">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Alamat</label>
+          <textarea class="form-control form-control-glass" id="customerAddress" rows="2"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">WhatsApp (format: 628xxx)</label>
+          <input type="text" class="form-control form-control-glass" id="customerWA" placeholder="628xxxxxxxxxx" autocomplete="off">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-glass-warning" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-glass-primary" onclick="saveCustomer()">
+          <i class="bi bi-check-lg me-2"></i>Simpan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Item Modal -->
+<div class="modal fade" id="itemModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-content-glass">
+      <div class="modal-header">
+        <h5 class="modal-title" id="itemModalTitle">
+          <i class="bi bi-box-seam me-2" style="color:#667eea"></i>Tambah Barang
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="itemId">
+        <div class="mb-3">
+          <label class="form-label">Kode Barang</label>
+          <input type="text" class="form-control form-control-glass" id="itemCode" autocomplete="off">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Nama Barang *</label>
+          <input type="text" class="form-control form-control-glass" id="itemName" required autocomplete="off">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Kategori</label>
+          <input type="text" class="form-control form-control-glass" id="itemCategory" list="categoryList" placeholder="Pilih atau ketik kategori" autocomplete="off">
+          <datalist id="categoryList"></datalist>
+        </div>
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="mb-3">
+              <label class="form-label">Harga (Rp) *</label>
+              <input type="number" class="form-control form-control-glass" id="itemPrice" required min="0" step="1000">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="mb-3">
+              <label class="form-label">Stok</label>
+              <input type="number" class="form-control form-control-glass" id="itemStock" min="0" value="0">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-glass-warning" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-glass-primary" onclick="saveItem()">
+          <i class="bi bi-check-lg me-2"></i>Simpan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Invoice Preview Modal -->
+<div class="modal fade" id="invoiceModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content modal-content-glass">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-file-earmark-text me-2" style="color:#667eea"></i>Preview Invoice
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="invoicePreview"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-glass-warning" data-bs-dismiss="modal">Tutup</button>
+        <button type="button" class="btn btn-glass-primary" onclick="printInvoice()">
+          <i class="bi bi-printer me-2"></i>Print
+        </button>
+        <button type="button" class="btn btn-glass-success" onclick="downloadPDF()">
+          <i class="bi bi-filetype-pdf me-2"></i>Export PDF
+        </button>
+        <button type="button" class="btn btn-whatsapp" onclick="sendWhatsApp()">
+          <i class="bi bi-whatsapp me-2"></i>Kirim WA
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Invoice WhatsApp Modal -->
+<div class="modal fade" id="waModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-content-glass">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-whatsapp me-2" style="color:#25d366"></i>Kirim via WhatsApp
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Nomor WhatsApp</label>
+          <input type="text" class="form-control form-control-glass" id="waNumber" placeholder="628xxxxxxxxxx">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Pesan</label>
+          <textarea class="form-control form-control-glass" id="waMessage" rows="4"></textarea>
+        </div>
+        <div class="alert alert-info small">
+          <i class="bi bi-info-circle"></i> PDF akan diunduh secara otomatis. Lampirkan file PDF saat mengirim pesan WhatsApp.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-glass-warning" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-whatsapp" onclick="executeWhatsAppSend()">
+          <i class="bi bi-whatsapp me-2"></i>Kirim
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
