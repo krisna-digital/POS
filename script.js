@@ -408,7 +408,7 @@ function showInvoice(txId) {
   if(!tx) return;
   const preview = document.getElementById('invoicePreview');
   preview.setAttribute('data-tx-id', txId);
-  const storeName = getSetting('storeName','KD - Toko Profesional');
+  const storeName = getSetting('storeName','KD - Krisna Digital');
   const storeAddress = getSetting('storeAddress','Jl. Merdeka Raya');
   const storePhone = getSetting('storePhone','+62 812-3456-7890');
   const storeEmail = getSetting('storeEmail','info@kd-store.com');
@@ -416,7 +416,7 @@ function showInvoice(txId) {
   const time = new Date(tx.createdAt).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
   const statusClass = tx.status==='Lunas'?'status-lunas':'status-belum';
   let itemsHtml = tx.items.map(item => `<tr><td style="padding:6px">${escapeHtml(item.name)}</td><td style="text-align:center">${item.qty}</td><td style="text-align:right">${formatRupiah(item.price)}</td><td style="text-align:right">${formatRupiah(item.subtotal)}</td></tr>`).join('');
-  preview.innerHTML = `<div id="invoiceContent"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><div><img src="logo.png" style="width:40px;height:40px;border-radius:10px" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22%23667eea%22%20rx%3D%2210%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3EKD%3C%2Ftext%3E%3C%2Fsvg%3E';"><div><div style="font-weight:800">${escapeHtml(storeName)}</div><div class="small">Toko Profesional</div></div></div><div style="text-align:right"><div style="font-size:1.2rem;font-weight:800">${tx.invoiceNumber}</div><div class="small">${today} ${time}</div></div></div><div style="display:flex;justify-content:space-between;margin-bottom:12px"><div><strong>Kepada:</strong><br>${escapeHtml(tx.customerName)}</div><div><strong>Pembayaran:</strong><br>${tx.paymentMethod}<br><span class="${statusClass}">${tx.status}</span></div></div><table style="width:100%;border-collapse:collapse"><thead><tr style="background:#667eea;color:white"><th style="padding:6px">Item</th><th>Qty</th><th>Harga</th><th>Subtotal</th></tr></thead><tbody>${itemsHtml}</tbody></table><div style="text-align:right;margin-top:12px"><div>Subtotal: ${formatRupiah(tx.subtotal)}</div><div>Diskon: -${formatRupiah(tx.discount)}</div><div style="font-weight:800">Total: ${formatRupiah(tx.total)}</div></div><div style="margin-top:16px;text-align:center;font-size:0.7rem">Terima kasih telah berbelanja.<br>${storeName} | ${storePhone}</div></div>`;
+  preview.innerHTML = `<div id="invoiceContent"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><div><img src="logo.png" style="width:40px;height:40px;border-radius:10px" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22%23667eea%22%20rx%3D%2210%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3EKD%3C%2Ftext%3E%3C%2Fsvg%3E';"><div><div style="font-weight:800">${escapeHtml(storeName)}</div><div class="small">Krisna Digital</div></div></div><div style="text-align:right"><div style="font-size:1.2rem;font-weight:800">${tx.invoiceNumber}</div><div class="small">${today} ${time}</div></div></div><div style="display:flex;justify-content:space-between;margin-bottom:12px"><div><strong>Kepada:</strong><br>${escapeHtml(tx.customerName)}</div><div><strong>Pembayaran:</strong><br>${tx.paymentMethod}<br><span class="${statusClass}">${tx.status}</span></div></div><table style="width:100%;border-collapse:collapse"><thead><tr style="background:#667eea;color:white"><th style="padding:6px">Item</th><th>Qty</th><th>Harga</th><th>Subtotal</th></tr></thead><tbody>${itemsHtml}</tbody></table><div style="text-align:right;margin-top:12px"><div>Subtotal: ${formatRupiah(tx.subtotal)}</div><div>Diskon: -${formatRupiah(tx.discount)}</div><div style="font-weight:800">Total: ${formatRupiah(tx.total)}</div></div><div style="margin-top:16px;text-align:center;font-size:0.7rem">Terima kasih telah berbelanja.<br>${storeName} | ${storePhone}</div></div>`;
   new bootstrap.Modal(document.getElementById('invoiceModal')).show();
 }
 
@@ -433,7 +433,7 @@ async function loadLogoDataUrl() {
 async function generatePDF(tx) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  const storeName = getSetting('storeName','KD - Toko Profesional');
+  const storeName = getSetting('storeName','KD - Krisna Digital');
   const storeAddress = getSetting('storeAddress','Jl. Merdeka Raya');
   const storePhone = getSetting('storePhone','+62 812-3456-7890');
   const storeEmail = getSetting('storeEmail','info@kd-store.com');
@@ -446,7 +446,7 @@ async function generatePDF(tx) {
   doc.setFillColor(102,126,234); doc.rect(0,0,210,32,'F');
   if(logoData) doc.addImage(logoData,'PNG',logoX,logoY,logoWidth,logoHeight);
   doc.setTextColor(255,255,255); doc.setFontSize(14); doc.setFont(undefined,'bold'); doc.text(storeName, textX, 16);
-  doc.setFontSize(8); doc.setFont(undefined,'normal'); doc.text('Toko Profesional', textX, 23);
+  doc.setFontSize(8); doc.setFont(undefined,'normal'); doc.text('Krisna Digital', textX, 23);
   doc.text(storeAddress, textX, 28);
   doc.setFontSize(12); doc.setFont(undefined,'bold'); doc.text(tx.invoiceNumber, 195, 16, {align:'right'});
   doc.setFontSize(8); doc.setFont(undefined,'normal'); doc.text(today + ' ' + time, 195, 23, {align:'right'});
@@ -490,7 +490,7 @@ async function sendWhatsApp() {
   const doc = await generatePDF(tx);
   doc.save(tx.invoiceNumber+'.pdf');
   showToast('PDF faktur telah diunduh. Silakan lampirkan file tersebut saat mengirim WA.','info');
-  const storeName = getSetting('storeName','KD - Toko Profesional');
+  const storeName = getSetting('storeName','KD - Krisna Digital');
   const message = `Yth ${tx.customerName}\n\nIni adalah Faktur ${tx.invoiceNumber} dengan total jumlah ${formatRupiah(tx.total)}\n\nSilakan lihat rincian dalam file Faktur terlampir.\n\nHormat Kami\n${storeName}`;
   let waNumber = tx.customerWA || '';
   waNumber = waNumber.replace(/[^0-9]/g,'');
@@ -524,7 +524,7 @@ async function sendHistoryWA(txId) {
   const doc = await generatePDF(tx);
   doc.save(tx.invoiceNumber+'.pdf');
   showToast('PDF diunduh. Lampirkan saat kirim WA.','info');
-  const storeName = getSetting('storeName','KD - Toko Profesional');
+  const storeName = getSetting('storeName','KD - Krisna Digital');
   const message = `Yth ${tx.customerName}\n\nIni adalah Faktur ${tx.invoiceNumber} dengan total jumlah ${formatRupiah(tx.total)}\n\nSilakan lihat rincian dalam file Faktur terlampir.\n\nHormat Kami\n${storeName}`;
   let waNumber = tx.customerWA || '';
   waNumber = waNumber.replace(/[^0-9]/g,'');
@@ -566,7 +566,7 @@ function refreshDashboard() {
 // SETTINGS & DATA
 // ============================================
 function loadSettings() {
-  document.getElementById('settingStoreName').value = getSetting('storeName','KD - Toko Profesional');
+  document.getElementById('settingStoreName').value = getSetting('storeName','KD - Krisna Digital');
   document.getElementById('settingStoreAddress').value = getSetting('storeAddress','Jl. Merdeka Raya');
   document.getElementById('settingStorePhone').value = getSetting('storePhone','+62 812-3456-7890');
   document.getElementById('settingStoreEmail').value = getSetting('storeEmail','info@kd-store.com');
