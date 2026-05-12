@@ -567,9 +567,9 @@ function refreshDashboard() {
 // ============================================
 function loadSettings() {
   document.getElementById('settingStoreName').value = getSetting('storeName','KD - Krisna Digital');
-  document.getElementById('settingStoreAddress').value = getSetting('storeAddress','Jl. Merdeka Raya');
-  document.getElementById('settingStorePhone').value = getSetting('storePhone','+62 812-3456-7890');
-  document.getElementById('settingStoreEmail').value = getSetting('storeEmail','info@kd-store.com');
+  document.getElementById('settingStoreAddress').value = getSetting('storeAddress','Jl. Pelabuhan, Br. Pasar, Pekutatan, Kabupaten Jembrana, Bali');
+  document.getElementById('settingStorePhone').value = getSetting('storePhone','+62 878-8226-1578');
+  document.getElementById('settingStoreEmail').value = getSetting('storeEmail','krisna.kusumaaaa@gmail.com');
 }
 function saveSettings() {
   setSetting('storeName', document.getElementById('settingStoreName').value.trim());
